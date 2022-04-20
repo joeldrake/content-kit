@@ -1,6 +1,20 @@
 <script context="module">
-	export const hydrate = false;
-	export const prerender = true;
+	export async function load({ params }) {
+		return {
+			props: {
+				page: params.page,
+				subpage: params.subpage
+			}
+		};
+	}
 </script>
 
-subpage
+<script lang="ts">
+	import { pages } from '$lib/store';
+	export let page: string;
+	export let subpage: string;
+	console.log('subpage', $pages);
+</script>
+
+page: {page}
+subpage: {subpage}

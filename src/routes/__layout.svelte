@@ -11,9 +11,11 @@
 </script>
 
 <script lang="ts">
+	import { pages } from '$lib/store';
 	import type { Entry } from 'contentful';
 	export let entries: Entry<any>[];
 	console.log('layout mounted');
+	pages.set(entries);
 </script>
 
 <main>

@@ -1,6 +1,18 @@
 <script context="module">
-	export const hydrate = false;
-	export const prerender = true;
+	export async function load({ params }) {
+		return {
+			props: {
+				page: params.page
+			}
+		};
+	}
 </script>
 
-page
+<script lang="ts">
+	import { pages } from '$lib/store';
+	export let page: string;
+	const findPage = $pages.find((p) => p.fields.slug === page);
+	console.log('page', page);
+</script>
+
+page: {page}
