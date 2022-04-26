@@ -1,13 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { client } from '$lib/contentfulClient';
 
 export async function get() {
 	// get all blogs from Contentful
 	let entries;
 	try {
+		// todo: get only startpage
 		entries = await client.getEntries({
 			content_type: 'page',
-			include: 5,
-			order: 'fields.order'
+			'fields.slug': '/',
+			include: 5
 		});
 	} catch (e) {
 		console.log(e);
@@ -22,7 +24,7 @@ export async function get() {
 		return {
 			status: 200,
 			body: {
-				entries: entries.items
+				entries
 			}
 		};
 	}

@@ -11,7 +11,7 @@
 <script lang="ts">
 	import { pages } from '$lib/store';
 	export let page: string;
-	const findPage = $pages.find((p) => p.fields.slug === page);
+	const findPage = $pages?.fields?.subpages?.find((p) => p.fields.slug === page);
 	console.log('page', page);
 </script>
 

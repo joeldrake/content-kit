@@ -1,21 +1,18 @@
 <script lang="ts">
+	import { pages } from '$lib/store';
 	import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
-	import type { Entry } from 'contentful';
-
-	export let page: Entry<unknown>;
-	const fields = page?.fields as any;
-	const title = fields?.title as any;
-	const image = fields?.image as any;
-	const content = fields?.content as any;
 </script>
 
-<h1>{title}</h1>
-<img
-	src={image.fields.file.url}
-	width={image.fields.file.details.image.width}
-	height={image.fields.file.details.image.height}
-	alt={image.fields.description}
-/>
-<div>{@html documentToHtmlString(content)}</div>
+<h1>{$pages.fields.title}</h1>
 
-<pre>{JSON.stringify(page, null, 2)}</pre>
+{#if $pages?.fields?.image}
+	<img
+		src={$pages.fields.image.fields.file.url}
+		width={$pages.fields.image.fields.file.details.image.width}
+		height={$pages?.fields.image.fields.file.details.image.height}
+		alt={$pages?.fields.image.fields.description}
+	/>
+{/if}
+{#if $pages?.fields?.content}
+	<div>{@html documentToHtmlString($pages.fields.content)}</div>
+{/if}
