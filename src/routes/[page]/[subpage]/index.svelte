@@ -3,19 +3,27 @@
 	export async function load({ params }) {
 		return {
 			props: {
-				page: params.page,
-				subpage: params.subpage
+				params
 			}
 		};
 	}
 </script>
 
 <script lang="ts">
+	import Page from '$lib/components/Page.svelte';
 	import { pages } from '$lib/store';
-	export let page: string;
-	export let subpage: string;
-	console.log('subpage', $pages);
+	export let params: any;
+	let findSubpage: App.Entry | undefined;
+	let findPage: App.Entry | undefined;
+	$: findPage = $pages?.fields.subpages?.find((p) => p.fields.slug === params.page);
+	$: if (findPage) {
+		findSubpage = findPage.fields.subpages?.find((p) => p.fields.slug === params.subpage);
+	}
 </script>
 
-page: {page}
-subpage: {subpage}
+page: {params.page}
+subpage: {params.subpage}
+
+{#if findSubpage}
+	<Page page={findSubpage} />
+{/if}
