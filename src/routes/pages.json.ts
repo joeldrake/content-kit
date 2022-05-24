@@ -12,13 +12,15 @@ export async function get() {
 			include: 5
 		});
 	} catch (e) {
-		console.log(e);
+		// console.log(e);
 		return {
 			status: 404
 		};
 	}
 
-	console.log('fetch');
+	// const entries = local_entries;
+
+	// console.log('fetch');
 
 	if (entries) {
 		return {

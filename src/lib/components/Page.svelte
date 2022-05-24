@@ -24,7 +24,13 @@
 
 <style>
 	article {
-		max-width: 60rem;
-		padding: 2rem;
+		max-width: 960px;
+		padding: 40px 32px;
+	}
+
+	@media (max-width: 960px) {
+		article {
+			padding-top: 64px;
+		}
 	}
 </style>

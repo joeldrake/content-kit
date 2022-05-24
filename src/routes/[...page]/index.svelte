@@ -20,13 +20,13 @@
 	let findSubpage: App.Entry | undefined;
 	let findPage: App.Entry | undefined;
 	$: findPage = $pages?.fields.subpages?.find((p) => p.fields.slug === page);
+
 	$: if (findPage && subpage) {
 		findSubpage = findPage.fields.subpages?.find((p) => p.fields.slug === subpage);
+	} else {
+		findSubpage = undefined;
 	}
 </script>
-
-page: {page}
-subpage: {subpage}
 
 {#if findSubpage || findPage}
 	<Page page={findSubpage || findPage} />
