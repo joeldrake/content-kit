@@ -8,13 +8,6 @@
 }
 
 /*
-    2. Remove default margin
-  */
-* {
-	margin: 0;
-}
-
-/*
     3. Allow percentage-based heights in the application
   */
 html,
