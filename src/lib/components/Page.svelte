@@ -6,7 +6,7 @@
 
 <article>
 	{#if page}
-		<h1>{page.fields.title}</h1>
+		<h1>{@html page.fields.title}</h1>
 
 		{#if page.fields.image}
 			<img
@@ -30,7 +30,7 @@
 
 	@media (max-width: 960px) {
 		article {
-			padding-top: 64px;
+			padding: 64px 20px 32px 20px;
 		}
 	}
 </style>

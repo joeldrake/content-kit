@@ -1,18 +1,30 @@
 <script lang="ts">
 	import { pages, navOpen } from '$lib/store';
+	import Close from '$lib/icons/Close.svelte';
+	import Menu from '$lib/icons/Menu.svelte';
 
 	function handleMenuButtonClick() {
 		$navOpen = !$navOpen;
 	}
 </script>
 
-<button class="menu-button" class:navOpen={$navOpen} on:click={handleMenuButtonClick}>
+<button
+	class="menu-button"
+	class:navOpen={$navOpen}
+	on:click={handleMenuButtonClick}
+	aria-label={$navOpen ? 'Stäng meny' : 'Öppna meny'}
+>
 	{#if $navOpen}
-		<img src="/images/close.svg" draggable="false" alt="" aria-hidden="true" />
+		<Close />
 	{:else}
-		<img src="/images/menu.svg" draggable="false" alt="" aria-hidden="true" />
+		<Menu />
 	{/if}
-	<img src="/images/logo.jpg" draggable="false" class="menu-logo" alt="Brf trasten 7 & 8" />
+	<img
+		src="/images/brftrastentext.jpg"
+		draggable="false"
+		class="menu-logo"
+		alt="Brf trasten 7 & 8"
+	/>
 </button>
 
 <style>
@@ -28,7 +40,7 @@
 			padding: 0;
 			height: 40px;
 			top: 12px;
-			left: 30px;
+			left: 20px;
 			display: flex;
 			justify-content: center;
 			align-items: center;

@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import { pages, navOpen } from '$lib/store';
 	import { afterNavigate } from '$app/navigation';
+	import ChevronRight from '$lib/icons/ChevronRight.svelte';
 	export const prerender = true;
 
 	let navigation: HTMLElement | null;
@@ -36,11 +37,7 @@
 		<ul class="top">
 			<li>
 				<a href={`/`} class:active={$page.url.pathname === `/`} on:click={handleNavItemClick}
-					>Start<img
-						src="/images/chevron-right.svg"
-						class="navigation-chevron"
-						alt="Aktiv sida"
-					/></a
+					>Start<span class="navigation-chevron"><ChevronRight /></span></a
 				>
 			</li>
 
@@ -52,11 +49,8 @@
 							href={pageurl}
 							class:active={$page.url.pathname === pageurl}
 							on:click={handleNavItemClick}
-							>{toppage.fields.title}<img
-								src="/images/chevron-right.svg"
-								class="navigation-chevron"
-								alt="Aktiv sida"
-							/></a
+							>{@html toppage.fields.title}<span class="navigation-chevron"><ChevronRight /></span
+							></a
 						>
 
 						{#if toppage.fields.subpages}
@@ -68,11 +62,9 @@
 											href={subpageurl}
 											class:active={$page.url.pathname === subpageurl}
 											on:click={handleNavItemClick}
-											>{subpage.fields.title}<img
-												src="/images/chevron-right.svg"
-												class="navigation-chevron"
-												alt="Aktiv sida"
-											/></a
+											>{@html subpage.fields.title}<span class="navigation-chevron"
+												><ChevronRight /></span
+											></a
 										>
 									</li>
 								{/each}
@@ -89,7 +81,7 @@
 	nav {
 		--nav-line-color: var(--grey-3);
 		--nav-line-width: 1px;
-		position: sticky;
+		position: fixed;
 		top: 0;
 		height: 100vh;
 		overflow: auto;
@@ -178,7 +170,7 @@
 		nav {
 			position: fixed;
 			display: none;
-			padding-top: 4rem;
+			padding: 4rem 20px;
 			animation: slideIn var(--animation-time);
 		}
 

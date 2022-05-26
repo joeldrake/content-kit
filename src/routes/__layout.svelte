@@ -32,13 +32,12 @@
 </div>
 
 <style>
-	.site-wrapper {
-		display: flex;
-		flex-direction: row;
+	main {
+		padding-left: 300px;
 	}
 	@media (max-width: 960px) {
-		.site-wrapper {
-			display: block;
+		main {
+			padding-left: 0;
 		}
 	}
 </style>
