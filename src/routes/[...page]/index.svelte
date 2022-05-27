@@ -14,7 +14,6 @@
 <script lang="ts">
 	import Page from '$lib/components/Page.svelte';
 	import { pages } from '$lib/store';
-	export const prerender = true;
 	export let page: string | undefined;
 	export let subpage: string | undefined;
 	let findSubpage: App.Entry | undefined;

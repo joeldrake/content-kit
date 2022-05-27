@@ -4,8 +4,6 @@
 	import { pages, navOpen, isSmall } from '$lib/store';
 	import { afterNavigate } from '$app/navigation';
 
-	export const prerender = true;
-
 	let navigation: HTMLElement | null;
 
 	afterNavigate(() => {
