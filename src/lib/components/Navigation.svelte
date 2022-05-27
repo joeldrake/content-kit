@@ -27,49 +27,61 @@
 		const target = e.target as HTMLAnchorElement;
 		if (target.href === window.location.href) $navOpen = false;
 	}
+
+	function navScrollTop() {
+		const target = document.querySelector('.navigation-scroll');
+		if (!target) return;
+		target.scrollTop = 0;
+	}
 </script>
 
 <svelte:body on:click={handleClick} />
 
 {#if !$isSmall || ($isSmall && $navOpen)}
 	<nav class="navigation" class:navOpen={$navOpen} bind:this={navigation}>
-		<img src="/images/logo.jpg" class="navigation-logo" alt="Brf trasten 7 & 8" />
+		<div class="navigation-logo-wrapper">
+			<a href="/" alt="start" on:click={navScrollTop}>
+				<img src="/images/logo.jpg" class="navigation-logo" alt="Brf trasten 7 & 8" />
+			</a>
+		</div>
 		{#if $pages}
-			<ul class="top">
-				<li>
-					<a href={`/`} class:active={$page.url.pathname === `/`} on:click={handleNavItemClick}
-						>Start</a
-					>
-				</li>
+			<div class="navigation-scroll">
+				<ul class="top">
+					<li>
+						<a href={`/`} class:active={$page.url.pathname === `/`} on:click={handleNavItemClick}
+							>Start</a
+						>
+					</li>
 
-				{#if $pages.fields.subpages}
-					{#each $pages.fields.subpages as toppage}
-						{@const pageurl = `/${toppage.fields.slug}`}
-						<li>
-							<a
-								href={pageurl}
-								class:active={$page.url.pathname === pageurl}
-								on:click={handleNavItemClick}>{@html toppage.fields.title}</a
-							>
+					{#if $pages.fields.subpages}
+						{#each $pages.fields.subpages as toppage}
+							{@const pageurl = `/${toppage.fields.slug}`}
+							<li>
+								<a
+									href={pageurl}
+									class:active={$page.url.pathname === pageurl}
+									on:click={handleNavItemClick}>{@html toppage.fields.title}</a
+								>
 
-							{#if toppage.fields.subpages}
-								<ul>
-									{#each toppage.fields.subpages as subpage}
-										{@const subpageurl = `/${toppage.fields.slug}/${subpage.fields.slug}`}
-										<li>
-											<a
-												href={subpageurl}
-												class:active={$page.url.pathname === subpageurl}
-												on:click={handleNavItemClick}>{@html subpage.fields.title}</a
-											>
-										</li>
-									{/each}
-								</ul>
-							{/if}
-						</li>
-					{/each}
-				{/if}
-			</ul>
+								{#if toppage.fields.subpages}
+									<ul>
+										{#each toppage.fields.subpages as subpage}
+											{@const subpageurl = `/${toppage.fields.slug}/${subpage.fields.slug}`}
+											<li>
+												<a
+													href={subpageurl}
+													class:active={$page.url.pathname === subpageurl}
+													on:click={handleNavItemClick}>{@html subpage.fields.title}</a
+												>
+											</li>
+										{/each}
+									</ul>
+								{/if}
+							</li>
+						{/each}
+					{/if}
+				</ul>
+			</div>
 		{/if}
 	</nav>
 {/if}
@@ -77,18 +89,27 @@
 <style>
 	nav {
 		--nav-line-width: 1px;
+		--nav-desktop-header-height: 94px;
 		position: fixed;
 		top: 0;
 		height: 100vh;
-		overflow: auto;
+
 		background-color: var(--color-background);
 		box-shadow: var(--shadow-4);
 		padding: var(--padding-small);
+		padding-right: 0;
 		width: 90vw;
 		max-width: 300px;
 
 		box-shadow: var(--shadow);
 		border-right: 1px solid var(--color-border);
+	}
+
+	.navigation-scroll {
+		overflow: auto;
+		height: calc(100vh - (var(--nav-desktop-header-height) + var(--padding-small)));
+		padding-right: var(--padding-small);
+		padding-bottom: 80px;
 	}
 	ul {
 		list-style: none;
@@ -129,9 +150,14 @@
 		padding: 0;
 	}
 
+	.navigation-logo-wrapper {
+		height: var(--nav-desktop-header-height);
+		padding-right: var(--padding-small);
+		padding-bottom: var(--padding-small);
+	}
+
 	.navigation-logo {
 		width: 100%;
-		margin-bottom: var(--padding-small);
 	}
 
 	a {
@@ -168,7 +194,18 @@
 			position: fixed;
 			display: none;
 			padding: var(--padding-big) var(--padding-small);
+			padding-right: 0;
 			animation: slideIn var(--animation-time);
+		}
+
+		.navigation-scroll {
+			height: calc(100vh - var(--padding-big));
+			padding-right: var(--padding-small);
+		}
+
+		.navigation-logo-wrapper {
+			height: 0;
+			padding: 0;
 		}
 
 		.navigation-logo {

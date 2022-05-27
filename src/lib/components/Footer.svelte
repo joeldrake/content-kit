@@ -1,3 +1,8 @@
+<script lang="ts">
+	const date = new Date();
+	const currentYear = date.getFullYear();
+</script>
+
 <div class="footer">
 	<div class="footer-info">
 		<div class="footer-info-item">
@@ -15,7 +20,7 @@
 			769607-4371
 		</div>
 	</div>
-	<div class="footer-bottom">© 2022 Brf Trasten 7 och 8</div>
+	<div class="footer-bottom">© {currentYear} Brf Trasten 7 och 8</div>
 </div>
 
 <style>
