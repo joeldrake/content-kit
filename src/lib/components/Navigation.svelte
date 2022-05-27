@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { browser } from '$app/env';
 	import { page } from '$app/stores';
-	import { pages, navOpen } from '$lib/store';
+	import { pages, navOpen, isSmall } from '$lib/store';
 	import { afterNavigate } from '$app/navigation';
-	import ChevronRight from '$lib/icons/ChevronRight.svelte';
+
 	export const prerender = true;
 
 	let navigation: HTMLElement | null;
@@ -31,55 +31,51 @@
 
 <svelte:body on:click={handleClick} />
 
-<nav class="navigation" class:navOpen={$navOpen} bind:this={navigation}>
-	<img src="/images/logo.jpg" class="navigation-logo" alt="Brf trasten 7 & 8" />
-	{#if $pages}
-		<ul class="top">
-			<li>
-				<a href={`/`} class:active={$page.url.pathname === `/`} on:click={handleNavItemClick}
-					>Start<span class="navigation-chevron"><ChevronRight /></span></a
-				>
-			</li>
+{#if !$isSmall || ($isSmall && $navOpen)}
+	<nav class="navigation" class:navOpen={$navOpen} bind:this={navigation}>
+		<img src="/images/logo.jpg" class="navigation-logo" alt="Brf trasten 7 & 8" />
+		{#if $pages}
+			<ul class="top">
+				<li>
+					<a href={`/`} class:active={$page.url.pathname === `/`} on:click={handleNavItemClick}
+						>Start</a
+					>
+				</li>
 
-			{#if $pages.fields.subpages}
-				{#each $pages.fields.subpages as toppage}
-					{@const pageurl = `/${toppage.fields.slug}`}
-					<li>
-						<a
-							href={pageurl}
-							class:active={$page.url.pathname === pageurl}
-							on:click={handleNavItemClick}
-							>{@html toppage.fields.title}<span class="navigation-chevron"><ChevronRight /></span
-							></a
-						>
+				{#if $pages.fields.subpages}
+					{#each $pages.fields.subpages as toppage}
+						{@const pageurl = `/${toppage.fields.slug}`}
+						<li>
+							<a
+								href={pageurl}
+								class:active={$page.url.pathname === pageurl}
+								on:click={handleNavItemClick}>{@html toppage.fields.title}</a
+							>
 
-						{#if toppage.fields.subpages}
-							<ul>
-								{#each toppage.fields.subpages as subpage}
-									{@const subpageurl = `/${toppage.fields.slug}/${subpage.fields.slug}`}
-									<li>
-										<a
-											href={subpageurl}
-											class:active={$page.url.pathname === subpageurl}
-											on:click={handleNavItemClick}
-											>{@html subpage.fields.title}<span class="navigation-chevron"
-												><ChevronRight /></span
-											></a
-										>
-									</li>
-								{/each}
-							</ul>
-						{/if}
-					</li>
-				{/each}
-			{/if}
-		</ul>
-	{/if}
-</nav>
+							{#if toppage.fields.subpages}
+								<ul>
+									{#each toppage.fields.subpages as subpage}
+										{@const subpageurl = `/${toppage.fields.slug}/${subpage.fields.slug}`}
+										<li>
+											<a
+												href={subpageurl}
+												class:active={$page.url.pathname === subpageurl}
+												on:click={handleNavItemClick}>{@html subpage.fields.title}</a
+											>
+										</li>
+									{/each}
+								</ul>
+							{/if}
+						</li>
+					{/each}
+				{/if}
+			</ul>
+		{/if}
+	</nav>
+{/if}
 
 <style>
 	nav {
-		--nav-line-color: var(--grey-3);
 		--nav-line-width: 1px;
 		position: fixed;
 		top: 0;
@@ -87,17 +83,17 @@
 		overflow: auto;
 		background-color: var(--color-background);
 		box-shadow: var(--shadow-4);
-		padding: 32px;
+		padding: var(--padding-small);
 		width: 90vw;
 		max-width: 300px;
 
 		box-shadow: var(--shadow);
-		border-right: 1px solid var(--nav-line-color);
+		border-right: 1px solid var(--color-border);
 	}
 	ul {
 		list-style: none;
 		margin: 0;
-		padding-inline-start: 32px;
+		padding-inline-start: var(--padding-small);
 	}
 
 	li {
@@ -109,7 +105,7 @@
 		top: 0;
 		left: -16px;
 		height: 100%;
-		border-left: var(--nav-line-width) solid var(--nav-line-color);
+		border-left: var(--nav-line-width) solid var(--color-border);
 	}
 
 	li li:last-child::before {
@@ -124,8 +120,8 @@
 		left: -16px;
 		height: calc(50% + 1px);
 		width: 10px;
-		border-left: var(--nav-line-width) solid var(--nav-line-color);
-		border-bottom: var(--nav-line-width) solid var(--nav-line-color);
+		border-left: var(--nav-line-width) solid var(--color-border);
+		border-bottom: var(--nav-line-width) solid var(--color-border);
 		border-bottom-left-radius: 8px;
 	}
 
@@ -135,7 +131,7 @@
 
 	.navigation-logo {
 		width: 100%;
-		margin-bottom: 32px;
+		margin-bottom: var(--padding-small);
 	}
 
 	a {
@@ -144,19 +140,20 @@
 		justify-content: space-between;
 		color: var(--grey-7);
 		height: 40px;
-		border-bottom: var(--nav-line-width) solid var(--nav-line-color);
+		line-height: 1;
+		border-bottom: var(--nav-line-width) solid var(--color-border);
 	}
 
-	.navigation-chevron {
+	/* .navigation-chevron {
 		display: none;
 		margin-right: 0.25rem;
-		color: var(--nav-line-color);
+		color: var(--color-border);
 		height: 18px;
 	}
 
 	a.active .navigation-chevron {
 		display: inline-block;
-	}
+	} */
 	a.active {
 		color: var(--grey-9);
 		font-weight: 600;
@@ -170,7 +167,7 @@
 		nav {
 			position: fixed;
 			display: none;
-			padding: 4rem 20px;
+			padding: var(--padding-big) var(--padding-small);
 			animation: slideIn var(--animation-time);
 		}
 
@@ -185,6 +182,10 @@
 		@keyframes slideIn {
 			from {
 				transform: translateX(-100%);
+			}
+
+			top {
+				transform: translateX(0%);
 			}
 		}
 	}

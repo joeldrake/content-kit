@@ -1,7 +1,20 @@
 <script lang="ts">
-	import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
+	import { BLOCKS } from '@contentful/rich-text-types';
+	import { documentToHtmlString, type Options } from '@contentful/rich-text-html-renderer';
 
 	export let page: App.Entry | undefined;
+
+	const options = {
+		renderNode: {
+			[BLOCKS.EMBEDDED_ASSET]: (node) => {
+				const { file, description } = node.data.target.fields;
+				if (file.contentType.includes('image')) {
+					const { width, height } = file.details.image;
+					return `<img src="${file.url}" alt="${description}" width="${width}" height="${width}" loading="lazy" />`;
+				}
+			}
+		}
+	} as Partial<Options>;
 </script>
 
 <article>
@@ -17,7 +30,9 @@
 			/>
 		{/if}
 		{#if page.fields.content}
-			<div>{@html documentToHtmlString(page.fields.content).replace(/\n/g, `<br />`)}</div>
+			<div class="page-content">
+				{@html documentToHtmlString(page.fields.content, options).replace(/\n/g, `<br />`)}
+			</div>
 		{/if}
 	{/if}
 </article>
@@ -25,12 +40,18 @@
 <style>
 	article {
 		max-width: 960px;
-		padding: 40px 32px;
+		padding: var(--padding) var(--padding-small);
+	}
+
+	:global(.page-content hr) {
+		border: 0;
+		border-bottom: 1px solid var(--color-border);
 	}
 
 	@media (max-width: 960px) {
 		article {
-			padding: 64px 20px 32px 20px;
+			padding: var(--padding-small);
+			padding-top: 64px;
 		}
 	}
 </style>

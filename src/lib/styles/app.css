@@ -25,7 +25,9 @@
 
 	--color-accent: var(--indigo-9);
 	--color-background: #fff;
+	--color-background-secondary: var(--grey-1);
 	--color-text: var(--grey-9);
+	--color-border: var(--grey-3);
 
 	--shadow-color: 220 3% 15%;
 	--shadow-strength: 1%;
@@ -33,6 +35,10 @@
 		7px 0 14px -5px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%));
 
 	--animation-time: 0.2s;
+
+	--padding: 40px;
+	--padding-small: 32px;
+	--padding-big: 64px;
 }
 
 body {
@@ -44,6 +50,10 @@ body {
 	font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
 }
 
+body.noscroll {
+	overflow: hidden;
+}
+
 h1,
 h2,
 h3 {
@@ -53,7 +63,7 @@ h3 {
 
 h1 {
 	font-size: 3rem;
-	margin-bottom: 1rem;
+	margin-bottom: 2rem;
 }
 
 h2 {
@@ -78,6 +88,7 @@ a:hover {
 @media (max-width: 960px) {
 	h1 {
 		font-size: 2rem;
+		margin-bottom: 1rem;
 	}
 
 	h2 {

@@ -40,9 +40,9 @@
 			padding: 0;
 			height: 40px;
 			top: 12px;
-			left: 20px;
+			left: calc(var(--padding-small) - 3px);
 			display: flex;
-			justify-content: center;
+			justify-content: left;
 			align-items: center;
 			border: 0;
 			background-color: var(--color-background);
@@ -55,7 +55,7 @@
 		.menu-logo {
 			width: 100%;
 			max-width: 120px;
-			margin-left: 10px;
+			padding-left: 10px;
 		}
 	}
 </style>
