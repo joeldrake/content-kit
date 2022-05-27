@@ -80,6 +80,14 @@
 							</li>
 						{/each}
 					{/if}
+
+					<li>
+						<a
+							href={`/medlem`}
+							class:active={$page.url.pathname === `/medlem`}
+							on:click={handleNavItemClick}>Medlemssidor</a
+						>
+					</li>
 				</ul>
 			</div>
 		{/if}
@@ -109,7 +117,7 @@
 		overflow: auto;
 		height: calc(100vh - (var(--nav-desktop-header-height) + var(--padding-small)));
 		padding-right: var(--padding-small);
-		padding-bottom: 80px;
+		padding-bottom: 100px;
 	}
 	ul {
 		list-style: none;
@@ -204,8 +212,7 @@
 		}
 
 		.navigation-logo-wrapper {
-			height: 0;
-			padding: 0;
+			display: none;
 		}
 
 		.navigation-logo {
