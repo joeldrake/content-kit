@@ -9,7 +9,9 @@ const config = {
 	preprocess: preprocess(),
 
 	kit: {
-		adapter: adapter(),
+		adapter: adapter({
+			fallback: 'medlem.html'
+		}),
 		prerender: {
 			default: true
 		},
