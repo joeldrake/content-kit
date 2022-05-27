@@ -227,10 +227,6 @@
 			from {
 				transform: translateX(-100%);
 			}
-
-			top {
-				transform: translateX(0%);
-			}
 		}
 	}
 </style>
