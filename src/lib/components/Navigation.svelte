@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/env';
+	import { tick } from 'svelte';
 	import { page } from '$app/stores';
 	import { pages, navOpen, isSmall } from '$lib/store';
 	import { afterNavigate } from '$app/navigation';
@@ -9,6 +10,16 @@
 	afterNavigate(() => {
 		$navOpen = false;
 	});
+
+	$: if ($isSmall && $navOpen) {
+		tick().then(() => {
+			const target = document.querySelector('.active') as HTMLElement;
+
+			if (target) {
+				target.scrollIntoView({ block: 'end' });
+			}
+		});
+	}
 
 	function handleClick(e: MouseEvent) {
 		const path = e.composedPath();
