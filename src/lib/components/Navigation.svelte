@@ -78,14 +78,6 @@
 							</li>
 						{/each}
 					{/if}
-
-					<li>
-						<a
-							href={`/medlem`}
-							class:active={$page.url.pathname === `/medlem`}
-							on:click={handleNavItemClick}>Medlemssidor</a
-						>
-					</li>
 				</ul>
 			</div>
 		{/if}
