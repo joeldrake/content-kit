@@ -69,38 +69,43 @@
 
 <article>
 	{#if page}
-		<h1>{@html page.fields.title}</h1>
+		<div class="height-controller">
+			<h1>{@html page.fields.title}</h1>
 
-		{#if memberPages && !isLoggedin}
-			<p>Ange lösenord för att komma åt medlemssidor</p>
-			<form method="post" on:submit|preventDefault={handleLoginSubmit}>
-				<label>
-					Lösenord<br />
-					<input type="text" name="password" disabled={isDebouncing} />
-				</label>
-				<button type="submit" disabled={isDebouncing}>Logga in</button>
-				{#if loginError}
-					<div class="error">Fel lösenord, försök igen</div>
+			{#if memberPages && !isLoggedin}
+				<p>Ange lösenord för att komma åt medlemssidor</p>
+				<form method="post" on:submit|preventDefault={handleLoginSubmit}>
+					<label>
+						Lösenord<br />
+						<input type="text" name="password" disabled={isDebouncing} />
+					</label>
+					<button type="submit" disabled={isDebouncing}>Logga in</button>
+					{#if loginError}
+						<div class="error">Fel lösenord, försök igen</div>
+					{/if}
+				</form>
+			{/if}
+
+			{#if !memberPages || (memberPages && isLoggedin)}
+				{#if page.fields.image}
+					<img
+						src={page.fields.image.fields.file.url}
+						width={page.fields.image.fields.file.details.image.width}
+						height={page.fields.image.fields.file.details.image.height}
+						alt={page.fields.image.fields.description}
+					/>
 				{/if}
-			</form>
-		{:else if memberPages && isLoggedin}
-			<button on:click={handleLogout}>Logga ut</button>
-		{/if}
+				{#if page.fields.content}
+					<div class="page-content">
+						{@html documentToHtmlString(page.fields.content, options).replace(/\n/g, `<br />`)}
+					</div>
+				{/if}
+			{/if}
+		</div>
 
-		{#if !memberPages || (memberPages && isLoggedin)}
-			{#if page.fields.image}
-				<img
-					src={page.fields.image.fields.file.url}
-					width={page.fields.image.fields.file.details.image.width}
-					height={page.fields.image.fields.file.details.image.height}
-					alt={page.fields.image.fields.description}
-				/>
-			{/if}
-			{#if page.fields.content}
-				<div class="page-content">
-					{@html documentToHtmlString(page.fields.content, options).replace(/\n/g, `<br />`)}
-				</div>
-			{/if}
+		{#if memberPages && isLoggedin}
+			<p class="logout-info">Du är inloggad.</p>
+			<button class="logout-button" on:click={handleLogout}>Logga ut</button>
 		{/if}
 	{/if}
 </article>
@@ -120,10 +125,22 @@
 		color: red;
 	}
 
+	.logout-info {
+		font-style: italic;
+		margin-top: var(--padding-small);
+	}
+
+	.height-controller {
+		min-height: calc(100vh - var(--padding) - var(--padding) - 96px);
+	}
+
 	@media (max-width: 960px) {
 		article {
 			padding: var(--padding-small);
 			padding-top: 64px;
+		}
+		.height-controller {
+			min-height: calc(100vh - var(--padding) - var(--padding) - 128px);
 		}
 	}
 </style>
