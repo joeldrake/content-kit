@@ -1,24 +1,23 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { browser } from '$app/env';
 	import { BLOCKS } from '@contentful/rich-text-types';
 	import { documentToHtmlString, type Options } from '@contentful/rich-text-html-renderer';
-	import { digestMessage } from '$lib/utils/digestMessage';
+	import { digestMessage, checkValid } from '$lib/utils/digestMessage';
+	import { debounce } from '$lib/utils/debounce';
 	export let page: App.Entry | undefined;
 	let isLoggedin = false;
+	let isDebouncing = false;
+	let loginError = false;
 	const s = '6dfcb9fd1eb5';
-
-	console.log(page);
-	onMount(() => {
-		if (browser && page?.fields?.slug === 'medlemssidor') {
-			checkLoggedIn();
-		}
-	});
 
 	let memberPages = false;
 	$: if (page?.fields?.slug === 'medlemssidor') {
 		memberPages = true;
+		loginError = false;
 		checkLoggedIn();
+	} else if (memberPages) {
+		memberPages = false;
+		loginError = false;
 	}
 
 	async function checkLoggedIn() {
@@ -31,17 +30,28 @@
 		}
 	}
 
-	async function handleLoginSubmit(e) {
+	function handleLoginSubmit(e: any) {
+		loginError = false;
+		isDebouncing = true;
+		debouncedLoginSubmit(e);
+	}
+
+	const debouncedLoginSubmit = debounce(async (e: any) => {
+		isDebouncing = false;
 		const form = e.target;
 		const digest = await digestMessage(s + form?.password?.value);
 		if (checkValid(digest)) {
 			isLoggedin = true;
 			localStorage.setItem('t', digest);
+		} else {
+			if (form?.password?.value) form.password.value = '';
+			loginError = true;
 		}
-	}
+	});
 
-	function checkValid(t: string) {
-		return t === 'def14144f52c5bfb9db7b6f06f9fe413c4839447f9684a73f5dd8a93062efeca';
+	function handleLogout() {
+		isLoggedin = false;
+		localStorage.setItem('t', '');
 	}
 
 	const options = {
@@ -66,10 +76,15 @@
 			<form method="post" on:submit|preventDefault={handleLoginSubmit}>
 				<label>
 					Lösenord<br />
-					<input type="password" name="password" />
+					<input type="text" name="password" disabled={isDebouncing} />
 				</label>
-				<button type="submit">Logga in</button>
+				<button type="submit" disabled={isDebouncing}>Logga in</button>
+				{#if loginError}
+					<div class="error">Fel lösenord, försök igen</div>
+				{/if}
 			</form>
+		{:else if memberPages && isLoggedin}
+			<button on:click={handleLogout}>Logga ut</button>
 		{/if}
 
 		{#if !memberPages || (memberPages && isLoggedin)}
@@ -99,6 +114,10 @@
 	:global(.page-content hr) {
 		border: 0;
 		border-bottom: 1px solid var(--color-border);
+	}
+
+	.error {
+		color: red;
 	}
 
 	@media (max-width: 960px) {

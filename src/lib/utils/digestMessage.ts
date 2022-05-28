@@ -5,3 +5,9 @@ export async function digestMessage(message: string) {
 	const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join(''); // convert bytes to hex string
 	return hashHex;
 }
+
+export function checkValid(t: string) {
+	const a = 'def14144f52c5bfb9db7b6f06f9fe413';
+	const b = 'c4839447f9684a73f5dd8a93062efeca';
+	return t === a + b;
+}
