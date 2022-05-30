@@ -35,6 +35,8 @@
 	--shadow: 3px 0 5px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)),
 		7px 0 14px -5px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%));
 
+	--inner-shadow: inset 0 12px 8px -10px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%));
+
 	--animation-time: 0.2s;
 
 	--padding: 40px;

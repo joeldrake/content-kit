@@ -6,6 +6,7 @@
 	import { afterNavigate } from '$app/navigation';
 
 	let navigation: HTMLElement | null;
+	let navigationScrolled = false;
 
 	afterNavigate(() => {
 		$navOpen = false;
@@ -16,7 +17,7 @@
 			const target = document.querySelector('.active') as HTMLElement;
 
 			if (target) {
-				target.scrollIntoView({ block: 'end' });
+				target.scrollIntoView({ block: 'center' });
 			}
 		});
 	}
@@ -38,9 +39,22 @@
 	}
 
 	function navScrollTop() {
+		if (!browser) return;
 		const target = document.querySelector('.navigation-scroll');
 		if (!target) return;
 		target.scrollTop = 0;
+	}
+
+	function handleScroll() {
+		if (!browser) return;
+		const target = document.querySelector('.navigation-scroll');
+		if (!target) return;
+		console.log(target.scrollTop);
+		if (target.scrollTop > 5) {
+			navigationScrolled = true;
+		} else {
+			navigationScrolled = false;
+		}
 	}
 </script>
 
@@ -54,7 +68,7 @@
 			</a>
 		</div>
 		{#if $pages}
-			<div class="navigation-scroll">
+			<div class="navigation-scroll" class:navigationScrolled on:scroll={handleScroll}>
 				<ul class="top">
 					<li>
 						<a href={`/`} class:active={$page.url.pathname === `/`} on:click={handleNavItemClick}
@@ -98,15 +112,14 @@
 <style>
 	nav {
 		--nav-line-width: 1px;
-		--nav-desktop-header-height: 94px;
+		--nav-desktop-header-height: 125px;
 		position: fixed;
 		top: 0;
 		height: 100vh;
 
 		background-color: var(--color-background);
 		box-shadow: var(--shadow-4);
-		padding: var(--padding-small);
-		padding-right: 0;
+		padding: 0;
 		width: 90vw;
 		max-width: 300px;
 
@@ -116,9 +129,15 @@
 
 	.navigation-scroll {
 		overflow: auto;
-		height: calc(100vh - (var(--nav-desktop-header-height) + var(--padding-small)));
+		height: calc(100vh - var(--nav-desktop-header-height));
+		padding-left: var(--padding-small);
 		padding-right: var(--padding-small);
-		padding-bottom: 100px;
+		padding-bottom: 120px;
+		transition: box-shadow var(--animation-time);
+	}
+
+	.navigationScrolled {
+		box-shadow: var(--inner-shadow);
 	}
 	ul {
 		list-style: none;
@@ -161,8 +180,11 @@
 
 	.navigation-logo-wrapper {
 		height: var(--nav-desktop-header-height);
-		padding-right: var(--padding-small);
-		padding-bottom: var(--padding-small);
+		padding: var(--padding-small);
+	}
+	.navigation-logo-wrapper a {
+		height: auto;
+		border: 0;
 	}
 
 	.navigation-logo {
@@ -202,14 +224,13 @@
 		nav {
 			position: fixed;
 			display: none;
-			padding: var(--padding-big) var(--padding-small);
-			padding-right: 0;
+			padding: var(--padding-big) 0;
 			animation: slideIn var(--animation-time);
+			animation-fill-mode: forwards;
 		}
 
 		.navigation-scroll {
 			height: calc(100vh - var(--padding-big));
-			padding-right: var(--padding-small);
 		}
 
 		.navigation-logo-wrapper {
@@ -227,6 +248,9 @@
 		@keyframes slideIn {
 			from {
 				transform: translateX(-100%);
+			}
+			to {
+				transform: translateX(0);
 			}
 		}
 	}

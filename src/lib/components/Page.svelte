@@ -38,8 +38,9 @@
 
 	const debouncedLoginSubmit = debounce(async (e: any) => {
 		isDebouncing = false;
+		scrollToTop();
 		const form = e.target;
-		const digest = await digestMessage(s + form?.password?.value);
+		const digest = await digestMessage(s + form?.password?.value.toLowerCase());
 		if (checkValid(digest)) {
 			isLoggedin = true;
 			localStorage.setItem('t', digest);
@@ -52,6 +53,15 @@
 	function handleLogout() {
 		isLoggedin = false;
 		localStorage.setItem('t', '');
+		scrollToTop();
+	}
+
+	function scrollToTop() {
+		if (!browser) return;
+		window.scrollTo({
+			top: 0,
+			left: 0
+		});
 	}
 
 	const options = {
@@ -60,7 +70,9 @@
 				const { file, description } = node.data.target.fields;
 				if (file.contentType.includes('image')) {
 					const { width, height } = file.details.image;
-					return `<img src="${file.url}" alt="${description}" width="${width}" height="${width}" loading="lazy" />`;
+					return `<img src="${file.url}" alt="${
+						description || ''
+					}" width="${width}" height="${width}" loading="lazy" />`;
 				}
 			}
 		}
